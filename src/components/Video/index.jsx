@@ -1,23 +1,30 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Webcam from "react-webcam";
+
 import * as faceapi from 'face-api.js';
+
 import './style.scss';
+
 const videoConstraints = {
   width: 1280,
   height: 720,
   facingMode: "user"
 };
+
 const Video = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const tempCanvasRef = useRef(null);
   const imageRef = useRef(null);
+
   const capture = useCallback(
     async () => {
     },
     [canvasRef, webcamRef]
   );
+
   useEffect(() => {
+
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
       faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
@@ -30,7 +37,7 @@ const Video = () => {
         const image = imageRef.current;
         //const displaySize = { width: 1280, height: 720 }
         const video = document.getElementsByTagName('video')[0];
-  
+
         if (video && canvas && tempCanvas && image && webcamRef.current) {
           const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())//.withFaceExpressions();
           //const resizedDetections = faceapi.resizeResults(detections, displaySize);
@@ -39,6 +46,7 @@ const Video = () => {
           if (detections) {
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             faceapi.draw.drawDetections(canvas, detections);
+
             // Set the src of image element 
             const imageSrc = webcamRef.current.getScreenshot();
             image.src = imageSrc;
@@ -47,6 +55,7 @@ const Video = () => {
               const ctx = tempCanvas.getContext('2d');
               ctx.drawImage(image, 0, 0, 1280, 720);
               console.log(tempCanvas);
+
               // Pull the image data from the canvas
               const imageData = ctx.getImageData(0, 0, 1280, 720);
               ctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
@@ -68,6 +77,8 @@ const Video = () => {
       }, 5000);
    })
   }, []);
+
+
   return (
     <div className="video-component">
       <Webcam
@@ -84,4 +95,5 @@ const Video = () => {
     </div>
   );
 }
+
 export default Video;

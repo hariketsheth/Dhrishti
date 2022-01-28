@@ -8,5 +8,4 @@ const MainPageContainer = () => {
     </div>
   )
 }
-
 export default MainPageContainer;
