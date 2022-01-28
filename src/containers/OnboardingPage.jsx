@@ -8,4 +8,5 @@ const OnboardingPageContainer = () => {
     </div>
   )
 }
+
 export default OnboardingPageContainer;
